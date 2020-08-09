@@ -97,6 +97,22 @@ exports.getFacebook = (req, res, next) => {
 };
 
 /**
+ * GET /api/facebook_posts
+ * Facebook API example.
+ */
+exports.getFacebookPosts = (req, res, next) => {
+  const token = req.user.tokens.find((token) => token.kind === 'facebook');
+  graph.setAccessToken(token.accessToken);
+  graph.get(`${req.user.facebook}/sharedposts`, (err, posts) => {
+    if (err) { return next(err); }
+    res.render('api/facebook_posts', {
+      title: 'Facebook API',
+      posts
+    });
+  });
+};
+
+/**
  * GET /api/scraping
  * Web scraping example using Cheerio library.
  */
